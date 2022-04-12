@@ -1,0 +1,52 @@
+version: "0.1"
+services:
+  nginx:
+    image: cherkasik/rdga-nginx
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - web
+      - backend
+      - database
+    networks:
+      - backbone
+
+  web:
+    image: cherkasik/rdga-web
+    container_name: web
+    expose:
+      - 80
+    networks:
+      - backbone
+
+  backend:
+    image: cherkasik/rdga-backend
+    container_name: backend
+    expose:
+      - 8080
+    depends_on:
+      - database
+    networks:
+      - backbone
+
+  database:
+    image: cherkasik/rdga-database
+    container_name: database
+    expose:
+      - 5432
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    networks:
+      - backbone
+
+volumes:
+  database-data:
+    driver: local
+
+networks:
+  backbone:
+    driver: bridge
