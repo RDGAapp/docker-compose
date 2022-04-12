@@ -1,0 +1,33 @@
+name: Update docker-compose and Deploy (Production)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  workflow_call:
+    secrets:
+      VDS_HOST:
+        required: true
+      VDS_USER:
+        required: true
+      VDS_PASSWORD:
+        required: true
+      VDS_PORT:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Deploy script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VDS_HOST }}
+          username: ${{ secrets.VDS_USER }}
+          password: ${{ secrets.VDS_PASSWORD }}
+          port: ${{ secrets.VDS_PORT }}
+          script: cd docker-compose && docker compose down && docker system prune && git pull && docker compose up -d
