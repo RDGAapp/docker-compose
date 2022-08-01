@@ -6,13 +6,20 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
+      - ./certbot/conf/:/etc/letsencrypt/:ro
     depends_on:
       - web
       - backend
       - database
     networks:
       - backbone
+    restart: always
+
+  certbot:
+    container_name: certbot
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/conf/:/etc/letsencrypt/:rw
 
   web:
     image: cherkasik/rdga-web
@@ -21,6 +28,7 @@ services:
       - 80
     networks:
       - backbone
+    restart: always
 
   backend:
     image: cherkasik/rdga-backend
@@ -31,6 +39,7 @@ services:
       - database
     networks:
       - backbone
+    restart: always
 
   database:
     image: cherkasik/rdga-database
@@ -41,6 +50,7 @@ services:
       - database-data:/var/lib/postgresql/data
     networks:
       - backbone
+    restart: always
 
 volumes:
   database-data:
