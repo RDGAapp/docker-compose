@@ -6,7 +6,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./certbot/conf/:/etc/letsencrypt/:ro
+      - /etc/letsencrypt:/etc/letsencrypt/
     depends_on:
       - web
       - backend
@@ -14,12 +14,6 @@ services:
     networks:
       - backbone
     restart: always
-
-  certbot:
-    container_name: certbot
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/conf/:/etc/letsencrypt/:rw
 
   web:
     image: cherkasik/rdga-web
