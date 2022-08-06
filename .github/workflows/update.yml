@@ -30,4 +30,10 @@ jobs:
           username: ${{ secrets.VDS_USER }}
           password: ${{ secrets.VDS_PASSWORD }}
           port: ${{ secrets.VDS_PORT }}
-          script: cd docker-compose && docker compose down && docker system prune -a --force && git pull && docker compose up -d
+          script: >
+            cd docker-compose
+            && docker compose down
+            && docker system prune -a --force
+            && certbot renew --dry-run
+            && killall nginx && git pull
+            && docker compose up -d
