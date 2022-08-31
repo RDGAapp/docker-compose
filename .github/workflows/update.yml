@@ -35,5 +35,5 @@ jobs:
             && docker compose down
             && docker system prune -a --force
             && certbot renew
-            && killall nginx && git pull
+            && killall -q nginx && git pull
             && docker compose up -d
