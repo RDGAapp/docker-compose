@@ -49,6 +49,7 @@ services:
 volumes:
   database-data:
     driver: local
+    name: "db-volume"
 
 networks:
   backbone:
