@@ -29,6 +29,8 @@ services:
     container_name: backend
     expose:
       - 8080
+    volumes:
+      - logs:/app/logs
     depends_on:
       - database
     networks:
@@ -49,7 +51,14 @@ services:
 volumes:
   database-data:
     driver: local
-    name: "db-volume"
+    name: 'db-volume'
+  logs:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/root/logs'
+    name: 'logs-volume'
 
 networks:
   backbone:
